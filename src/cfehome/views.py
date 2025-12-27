@@ -15,7 +15,8 @@ def home_page_view(request, *args, **kwargs):
                                          "Total_visit_count" : total_visit_count,
                                          })
 
-
+def about_view(request, *args, **kwargs):
+    return render(request, "about.html", {"title": "About Page", "content": "Welcome to the about page."})
 
 def old_home_page_view(request, *args, **kwargs):
     my_title = "Hello World!"
