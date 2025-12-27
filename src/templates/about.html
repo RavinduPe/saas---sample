@@ -7,4 +7,13 @@
 {% block content %}
     <h1>About {{title}}</h1>
     <p>{{content}}</p>
+    <p>Page Visits:</p>
+    <ul>
+        {% for visit in queryset %}
+            <li>{{ visit.path }} - {{ visit.timestamp }}</li>
+        {% endfor %}
+    </ul>
+    <p>Page visit count: {{page_visit_count}}</p>
+    <p>Total visit count: {{total_visit_count}}</p>
+    <p>Presentage: {{presentage}}</p>
 {% endblock content %}
