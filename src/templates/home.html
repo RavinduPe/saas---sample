@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{block.super}} - Home
+{% endblock title %}
+
+{% block content %}
+    <h1>Welcome to {{title}}</h1>
+    <p>{{content}}</p>
+    <p>Page Visits:</p>
+    <ul>
+        {% for visit in queryset %}
+            <li>{{ visit.path }} - {{ visit.timestamp }}</li>
+        {% endfor %}
+    </ul>
+    <p>Page visit count: {{page_visit_count}}</p>
+    <p>Total visit count: {{Total_visit_count}}</p>
+    {% include "snippets/welcome-user-msg.html" %}
+{% endblock content %}
