@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-import os
+from decouple import config
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,10 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--ajlqjw&jvt6vgl%@hykcywzzr3t&r$s_as-0!d7#$a+x7xh71'
+SECRET_KEY = config("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str(os.environ.get("DJANGO_DEBUG")).lower() == "true"
+DEBUG = config("DJANGO_DEBUG", cast=bool)
+
+print("DEBUG = ", DEBUG , type(DEBUG))
 
 ALLOWED_HOSTS = [
     ".railway.app" #https://saas.prod.railway.app
@@ -83,13 +85,44 @@ WSGI_APPLICATION = 'cfehome.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# Add these at the top of your settings.py
+
+from urllib.parse import urlparse, parse_qsl
+
+# Replace the DATABASES section of your settings.py with this
+tmpPostgres = urlparse(config("DATABASE_URL"))
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': tmpPostgres.path.replace('/', ''),
+        'USER': tmpPostgres.username,
+        'PASSWORD': tmpPostgres.password,
+        'HOST': tmpPostgres.hostname,
+        'PORT': 5432,
+        'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
     }
 }
 
+# CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int , default=30)
+# DATABASE_URL = config("DATABASE_URL", cast=str)
+
+# if DATABASE_URL is not None:
+#     import dj_database_url
+#     DATABASES = {   
+#         'default': dj_database_url.config(
+#             default=DATABASE_URL,
+#             conn_max_age=CONN_MAX_AGE,
+#             conn_health_checks=True,
+#             )
+#         }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
