@@ -6,12 +6,14 @@
             SaaS
             {% endblock title %}
         </title>
+        {% include "base/css.html" %}
     </head>
     <body>
+        {% include "nav/navbar.html" %}
         {% block content %}
             John Doe
         {% endblock content %}
 
-
+        {% include "base/js.html" %}
     </body>
 </html>
