@@ -92,37 +92,39 @@ DATABASES = {
 }
 
 # Add these at the top of your settings.py
+#---
+# from urllib.parse import urlparse, parse_qsl
 
-from urllib.parse import urlparse, parse_qsl
-
-# # # Replace the DATABASES section of your settings.py with this
-tmpPostgres = urlparse(config("DATABASE_URL"))
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': tmpPostgres.path.replace('/', ''),
-        'USER': tmpPostgres.username,
-        'PASSWORD': tmpPostgres.password,
-        'HOST': tmpPostgres.hostname,
-        'PORT': 5432,
-        'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
-    }
-}
-
-# import dj_database_url
-# from decouple import config
-
-# DATABASE_URL = config("DATABASE_URL")
-# CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int, default=30)
+# # # # Replace the DATABASES section of your settings.py with this
+# tmpPostgres = urlparse(config("DATABASE_URL"))
 
 # DATABASES = {
-#     "default": dj_database_url.config(
-#         default=DATABASE_URL,
-#         conn_max_age=CONN_MAX_AGE,
-#         conn_health_checks=True
-#     )
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': tmpPostgres.path.replace('/', ''),
+#         'USER': tmpPostgres.username,
+#         'PASSWORD': tmpPostgres.password,
+#         'HOST': tmpPostgres.hostname,
+#         'PORT': 5432,
+#         'OPTIONS': dict(parse_qsl(tmpPostgres.query)),
+#     }
 # }
+
+#--
+
+import dj_database_url
+from decouple import config
+
+DATABASE_URL = config("DATABASE_URL", default=None)
+CONN_MAX_AGE = config("CONN_MAX_AGE", cast=int, default=30)
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=CONN_MAX_AGE,
+        conn_health_checks=True
+    )
+}
 
 
 # Password validation
