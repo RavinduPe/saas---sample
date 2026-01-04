@@ -15,7 +15,7 @@ VENDOR_STATICFILES = {
 
 class Command(BaseCommand):
     
-    def handle(self, *args, **kwargs):
+    def handle(self, *args: Any, **kwargs: Any):
         self.stdout.write("Downloading vendor static files...")
         completed_urls = []
         for name, url in VENDOR_STATICFILES.items():
