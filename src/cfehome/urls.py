@@ -22,6 +22,6 @@ from .views import about_view
 
 urlpatterns = [
     path('about/',about_view),
-    path('hello-world/',home_view),
+    path('',home_view),
     path('admin/', admin.site.urls),
 ]
