@@ -17,6 +17,7 @@ def home_view(request, *args, **kwargs):
                                          })
 
 def about_view(request, *args, **kwargs):
+    print(request.user.is_authenticated, request.user)
     PageVisit.objects.create(path=request.path)
     qs = PageVisit.objects.all()
     page_qs = PageVisit.objects.filter(path=request.path)
