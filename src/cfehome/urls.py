@@ -29,6 +29,6 @@ urlpatterns = [
     path('protected/', pw_protected_view, name='protected'),
     path('protected/user-only/', user_only_view, name='user-only'),
     path('protected/staff-only/', staff_only_view, name='staff-only'),
-    path('profiles/',include('profiles.url')),
+    path('profiles/',include('profiles.urls')),
     path('admin/', admin.site.urls),
 ]
