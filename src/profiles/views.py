@@ -10,6 +10,8 @@ User = get_user_model()
 def profile_view(request, username = None, *args, **kwargs):
     user = request.user
     # profile_user_obj = User.objects.get(username=username)
+    print('user.has_perm("auth.view_user")',user.has_perm("auth.view_user"))
+    print('user.has_perm("visits.view_pagevisit")',user.has_perm("auth.view_user"))
     profile_user_obj = get_object_or_404(User, username=username)
     is_me = user == profile_user_obj
     return HttpResponse(f"<h1>Profile Page</h1><br>Username: {username} - {profile_user_obj.id} - {user.id} - {is_me}</br>")    
