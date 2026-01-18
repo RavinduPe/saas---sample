@@ -5,13 +5,31 @@ from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+@login_required
+def profile_list_view(request):
+    context = {
+        "object_list" : User.objects.filter(is_active=True)
+    }
+    return render(request, "profiles/list.html", context)
 
 @login_required
-def profile_view(request, username = None, *args, **kwargs):
+def profile_detail_view(request, username=None, *args, **kwargs):
     user = request.user
-    # profile_user_obj = User.objects.get(username=username)
-    print('user.has_perm("auth.view_user")',user.has_perm("auth.view_user"))
-    print('user.has_perm("visits.view_pagevisit")',user.has_perm("auth.view_user"))
+    print(
+        user.has_perm("subscriptions.basic"),
+        user.has_perm("subscriptions.basic_ai"),
+        user.has_perm("subscriptions.pro"),
+        user.has_perm("subscriptions.advanced"),    
+    )
+    # user_groups = user.groups.all()
+    # print("user_groups", user_groups)
+    # if user_groups.filter(name__icontains='basic').exists():
+    #     return HttpResponse("Congrats")
     profile_user_obj = get_object_or_404(User, username=username)
-    is_me = user == profile_user_obj
-    return HttpResponse(f"<h1>Profile Page</h1><br>Username: {username} - {profile_user_obj.id} - {user.id} - {is_me}</br>")    
+    is_me = profile_user_obj == user
+    context = {
+        "object": profile_user_obj,
+        "instance": profile_user_obj,
+        "owner": is_me,
+    }
+    return render(request, "profiles/detail.html", context)
